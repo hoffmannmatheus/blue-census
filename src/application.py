@@ -13,11 +13,8 @@ def index():
     elif request.args.has_key('lat') and request.args.has_key('lon'):
         return jsonify(census_info.from_coordinates(request.args))
 
-    elif request.args.has_key('county'):
-        return jsonify(census_info.from_county(request.args))
-
-    elif request.args.has_key('state'):
-        return jsonify(census_info.from_state(request.args))
+    elif request.args.has_key('county') or request.args.has_key('state'):
+        return jsonify(census_info.from_name(request.args))
 
     else:
         abort(400)

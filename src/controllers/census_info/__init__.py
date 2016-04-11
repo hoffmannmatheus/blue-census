@@ -21,23 +21,32 @@ def from_coordinates(args):
     query['STATE'] = state_code
 
     # optionals
-    query['YEAR'] = translate_year(args.get('year')) \
-        if args.has_key('year') \
-        else '7' # default year
-    query['AGEGRP'] = translate_age(args.get('agegroup')) \
-        if args.has_key('agegroup') \
-        else '0'
+    query['YEAR'] = translate_year(args.get('year'))
+    query['AGEGRP'] = translate_age(args.get('agegroup'))
 
-    print(query)
     census = db.get(query)
-    return {'success': True, 'results': census}
+    return {'success': True, 'count': len(census), 'results': census}
 
-def from_county(args):
-    county = args.get('county')
-    return "hih" 
+def from_name(args):
+    query = {}
 
-def from_state(args):
-    return "hih" 
+    if args.has_key('county'):
+        query['CTYNAME'] = str(args.get('county'))
+    if args.has_key('state'):
+        query['STNAME'] = str(args.get('state'))
+
+    if len(query) == 0:
+        return {'success': False, 'error': 'Error on County/State name.'}
+
+    # optionals
+    query['YEAR'] = translate_year(args.get('year'))
+    query['AGEGRP'] = translate_age(args.get('agegroup'))
+
+    census = db.get(query)
+
+    if len(census) == 0:
+        return {'success': False, 'error': 'County name not found.'}
+    return {'success': True, 'count': len(census), 'results': census}
 
 def translate_year(year):
     # These are the year codes available in the data.
@@ -55,5 +64,5 @@ def translate_age(age):
     try:
         int_age = int(age)
         return age if 0 <= int_age and int_age <= 18 else '0'
-    except ValueError:
+    except (ValueError, TypeError):
         return '0'
