@@ -27,3 +27,6 @@ div.document {
 p.author {
     text-align:right;
 }
+div p.bg-info {
+    padding: 20px;
+}
