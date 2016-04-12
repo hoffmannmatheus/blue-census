@@ -29,6 +29,6 @@ def page_not_found(error):
     return 'This page does not exist', 404
 
 if __name__ == '__main__':
-    app.debug = True
+    app.debug = False
     app.root_path = abspath(dirname(__file__))
-    app.run()
+    app.run(port=80)
