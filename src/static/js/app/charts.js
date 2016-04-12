@@ -17,7 +17,7 @@ var plotChart1 = function(data) {
       value: males,
       color:"#F7464A",
       highlight: "#FF5A5E",
-      label: "Male Popuplation"
+      label: "Male Population"
     },
     {
       value: females,
@@ -43,7 +43,7 @@ var plotChart2 = function(data) {
 
   var data = {
     labels: [
-      "Popuplation"
+      "Population"
     ],
     datasets: [
         {
