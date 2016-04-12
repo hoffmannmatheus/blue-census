@@ -26,7 +26,12 @@ var plotChart1 = function(data) {
       label: "Female Population"
     },
   ];
-  var chart = new Chart(canvas).Doughnut(data, {legendTemplate:options.pieLegendTemplate});
+  var chart = new Chart(canvas).Doughnut(data, {
+    legendTemplate:options.pieLegendTemplate,
+    animationEasing: "linear",
+    animationSteps: 25,
+    responsive: true
+  });
   var legend = chart.generateLegend();
   $('#divMaleVsFemaleLegend').html(legend);
 };
@@ -89,7 +94,12 @@ var plotChart2 = function(data) {
     ]
   };
 
-  var chart = new Chart(canvas).Bar(data, {legendTemplate:options.barLegendTemplate});
+  var chart = new Chart(canvas).Bar(data, {
+    legendTemplate:options.barLegendTemplate,
+    animationEasing: "linear",
+    animationSteps: 25,
+    responsive: true
+  });
   var legend = chart.generateLegend();
   $('#divRacesLegend').html(legend);
 };

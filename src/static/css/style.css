@@ -12,21 +12,19 @@ a.reference                 { border-bottom: 1px dotted #004B6B; }
 a.footnote-reference        { border-bottom: 1px dotted #004B6B; }
 a.footnote-reference:hover  { border-bottom: 1px solid #6D4100; }
 
-/* other */
 body {
     margin: 0;
-    padding: 20px 30px;
+    padding: 10px 20px;
 }
 
 div.document {
     float: none;
-    width: 700px;
     margin: 0 auto;
     background: #FFF;
 }
 p.author {
-    float: right;
-    margin: 10px 10px 0 0;
+    margin: 0;
+    text-align:right;
 }
 div p.bg-info {
     padding: 20px;

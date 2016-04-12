@@ -2,6 +2,7 @@
 
 {% block head %}
 <title>Blue Census</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/vue.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/vue-resource.min.js') }}"></script>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
@@ -9,19 +10,18 @@
 {% endblock %}
 
 {% block body %}
-<div class=document>
-  <p class=author>by Matheus Hoffmann Silva. get the <a href="https://github.com/hoffmannmatheus/blue-census">source code</a>.</p>
-  <h1><font color="#164362">Blue</font> Census</h1>
+<div class="document col-xs-12 col-md-5">
+
+    <h1><font color="#164362">Blue</font> Census</h1>
+    <p class=author>by Matheus Hoffmann Silva. get the <a href="https://github.com/hoffmannmatheus/blue-census">source code</a>.</p>
   
   <div id="app">
 
     <h4>Search by:</h4>
     <form class="form-inline">
-      <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" v-on:click="setType('coord')">Lagitude and Longitude</button>
-      <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" v-on:click="setType('names')">State and County names</button>
+      <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('coord')">Lagitude and Longitude</button>
+      <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('names')">State and County names</button>
     </form>
-
-    <br/>
 
     <div class=typeCoord style="display:[[queryType == 'coord' ? 'block' : 'none']];">
       <h4>Latitude and Longitude</h4>
@@ -77,12 +77,12 @@
         <h3 class="panel-title">Insights - [[stateName]] - [[countyName]]</h3>
       </div>
       <div class="panel-body">
-        <div id="divMaleVsFemale" style="display:inline;float:left;">
-          <canvas id="chartMaleVsFemale" width="275" height="285"></canvas>
+        <div id="divMaleVsFemale" class="col-xs-12 col-md-6">
+          <canvas id="chartMaleVsFemale" width="auto" height="auto"></canvas>
           <div id="divMaleVsFemaleLegend"></div>
         </div>
-        <div id="divRaces" style="display:inline;float:right;">
-          <canvas id="chartRaces" width="335" height="285"></canvas>
+        <div id="divRaces"class="col-xs-12 col-md-6" >
+          <canvas id="chartRaces" width="auto" height="auto"></canvas>
           <div id="divRacesLegend"></div>
         </div>
       </div>
