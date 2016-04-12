@@ -1,0 +1,66 @@
+<!doctype html>
+
+{% block head %}
+<title>Blue Census</title>
+<script type=text/javascript src="{{ url_for('static', filename='js/lib/vue.min.js') }}"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class=document>
+  <h1><font color="#164362">Blue</font> Census</h1>
+  <p class=author>by <a>Matt Hoffmann Silva</a>. get the <a>source code</a>.</p>
+  
+  <div id="app">
+
+    <h4>Search by:</h4>
+    <form class="form-inline">
+      <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" v-on:click="setType('coord')">Lagitude and Longitude</button>
+      <button type="button" class="btn btn-[[queryType == 'names' ? 'info' : 'default']]" v-on:click="setType('names')">State and County names</button>
+    </form>
+    
+
+
+    <div class=typeCoord style="display:[[queryType == 'coord' ? 'block' : 'none']];">
+      <h4>Latitude and Longitude</h4>
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="latitudeInput">Latitude</label>
+          <input type="text" class="form-control" id="latitudeInput" v-model=coordLat value="40.7018252">
+        </div>
+        <div class="form-group">
+          <label for="longitudeInput">Longitude</label>
+          <input type="text" class="form-control" id="longitudeInput" v-model=coordLon value="-74.3859788">
+        </div>
+        <button type="submit" class="btn btn-primary">County Census</button>
+      </form>
+    </div>
+
+    <div class=typeNames style="display:[[queryType == 'names' ? 'block' : 'none']];">
+      <h4>State and County names</h4>
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="stateInput">State</label>
+          <input type="text" class="form-control" id="stateInput" v-model=nameState value="New Jersey">
+        </div>
+        <div class="form-group">
+          <label for="countyInput">County</label>
+          <input type="text" class="form-control" id="countyInput" v-model=nameCounty value="Union County">
+        </div>
+        <button type="submit" class="btn btn-primary">County Census</button>
+      </form>
+    </div>
+    
+    <br/>
+    <br/>
+    <p>API URL:</p>
+    <pre>/?[[queryType == 'coord' ? 'lat='+ coordLat +'&lon='+ coordLon : 'state=' + nameState + '&county=' + nameCounty]]</pre>
+
+  </div>
+</div>
+
+<script type=text/javascript src="{{ url_for('static', filename='js/app/app.js') }}"></script>
+{% endblock %}

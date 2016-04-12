@@ -1,5 +1,6 @@
 from flask import Flask
-from flask import request, abort, jsonify
+from flask import request, abort, jsonify, render_template
+from os.path import abspath, dirname
 
 import controllers.census_info as census_info
 
@@ -8,7 +9,7 @@ app = Flask('blue')
 @app.route('/', methods=['GET'])
 def index():
     if not request.args.items():
-        return 'home page'
+        return render_template('home.html')
 
     elif request.args.has_key('lat') and request.args.has_key('lon'):
         return jsonify(census_info.from_coordinates(request.args))
@@ -29,4 +30,5 @@ def page_not_found(error):
 
 if __name__ == '__main__':
     app.debug = True
+    app.root_path = abspath(dirname(__file__))
     app.run()
