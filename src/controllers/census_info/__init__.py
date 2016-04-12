@@ -45,7 +45,7 @@ def from_name(args):
     census = db.get(query)
 
     if len(census) == 0:
-        return {'success': False, 'error': 'County name not found.'}
+        return {'success': False, 'error': 'County or State name not found.'}
     return {'success': True, 'count': len(census), 'results': census}
 
 def translate_year(year):
