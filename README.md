@@ -4,7 +4,11 @@ blue census
 This is a simple web service that returns US county-level Census information.
 This information was retrieved from the US Census Bureau.
 
-To retrieve data, you need to specify a location.
+Access the service through (temporary link):
+
+http://52.37.37.110/
+
+
 
 URLs
 ----
