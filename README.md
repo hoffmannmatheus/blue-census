@@ -1,7 +1,7 @@
 blue census
 ===========
 
-This is a simple web service that returns US county-level Cenus information.
+This is a simple web service that returns US county-level Census information.
 This information was retrieved from the US Census Bureau.
 
 To retrieve data, you need to specify a location.
@@ -51,5 +51,6 @@ More information
 ----------------
 You can get more information about the data formats and fields here:
 http://www.census.gov/popest/data/counties/asrh/2014/files/CC-EST2014-ALLDATA.pdf
+
 This is the original source:
 http://www.census.gov/popest/data/counties/asrh/2014/CC-EST2014-ALLDATA.html
