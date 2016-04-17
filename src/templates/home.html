@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="document col-xs-12 col-md-5">
+<div class="document col-xs-12 col-md-7">
 
     <h1><font color="#164362">Blue</font> Census</h1>
     <p class=author>by Matheus Hoffmann Silva. get the <a href="https://github.com/hoffmannmatheus/blue-census">source code</a>.</p>
@@ -19,10 +19,18 @@
 
     <h4>Search by:</h4>
     <form class="form-inline">
+      <button type="button" class="btn btn-[[queryType == 'map' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map')">Map</button>
       <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('coord')">Lagitude and Longitude</button>
       <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('names')">State and County names</button>
     </form>
 
+    <!-- MAP -->
+    <div class=typeCoord style="display:[[queryType == 'map' ? 'block' : 'none']];">
+      <h4>Select a spot on the Map</h4>
+        <div id="map"></div>
+    </div>
+
+    <!-- COORDINATES -->
     <div class=typeCoord style="display:[[queryType == 'coord' ? 'block' : 'none']];">
       <h4>Latitude and Longitude</h4>
       <form class="form-inline">
@@ -31,13 +39,13 @@
           <input type="text" class="form-control" id="latitudeInput" v-model=coordLat value="30">
         </div>
         <div class="form-group">
-          <label for="longitudeInput">Longitude</label>
-          <input type="text" class="form-control" id="longitudeInput" v-model=coordLon value="-90">
+          <label for="longitudeInput">Longitude</label> <input type="text" class="form-control" id="longitudeInput" v-model=coordLon value="-90">
         </div>
         <button id=buttonCoord v-on:click="search()" type=button class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> County Census</button>
       </form>
     </div>
 
+    <!-- NAMES -->
     <div class=typeNames style="display:none;display:[[queryType == 'names' ? 'block' : 'none']];">
       <h4>State and County names</h4>
       <form class="form-inline">
@@ -54,8 +62,8 @@
     </div>
     
     <br/>
-    <br/>
 
+    <!-- NAMES -->
     <p>API URL:</p>
     <pre>[[buildUrl()]]</pre>
 
@@ -98,9 +106,15 @@
   </div>
 </div>
 
+<!-- Dependencies -->
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/Chart.min.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU7_ArhnUuEeW0ieZedIk1PYQ_Mz59qaA&callback=initMap" async defer></script>
+
+<!-- Controllers -->
+<script type=text/javascript src="{{ url_for('static', filename='js/app/map.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/app/app.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/app/charts.js') }}"></script>
+
 {% endblock %}

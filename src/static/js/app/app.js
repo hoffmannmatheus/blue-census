@@ -3,17 +3,21 @@
 // Change delimiters, since [[]] is used by Flask.
 Vue.config.delimiters = ['[[', ']]'];
 
-var app = new Vue({
+app = new Vue({
   el: '#app',
 
   data: {
-    queryType: 'coord',
+    queryType: 'map', // Default type
     prettyData: '',
     stateName: '',
+    apiurl: '',
     countyName: '',
     errorMessage: '',
-    data: '', isLoading: false,
-    hasError: false
+    data: '',
+    isLoading: false,
+    hasError: false,
+    mapLat: 0,
+    mapLon: 0
   },
 
   ready: function() {
@@ -25,12 +29,20 @@ var app = new Vue({
       this.queryType = type;
     },
 
+    updateMapCoordinates: function(lat, lon) {
+      this.mapLat = lat;
+      this.mapLon = lon;
+      this.buildUrl();
+    },
+
     buildUrl: function() {
-      var url = '/?';
-      if (this.queryType == 'coord') {
-        url += 'lat=' + this.coordLat + '&lon=' + this.coordLon;
-      } else {
+      var url = 'http://' + window.location.hostname + '/?';
+      if (this.queryType == 'names') {
         url += 'state=' + this.nameState + '&county=' + this.nameCounty;
+      } else if (this.queryType == 'map') {
+        url += 'lat=' + this.mapLat+ '&lon=' + this.mapLon;
+      } else {
+        url += 'lat=' + this.coordLat + '&lon=' + this.coordLon;
       }
       return url;
     },
@@ -43,8 +55,8 @@ var app = new Vue({
       $('#buttonNames').prop('disabled', true);
 
       var url = this.buildUrl();
-      
-      this.$http({url: url, method: 'GET'}).then(function (response) {
+
+      var success = function (response) {
         this.isLoading = false;
 
         $('#buttonCoord').removeProp('disabled');
@@ -66,7 +78,8 @@ var app = new Vue({
           charts.plotCharts(this.data);
         }
 
-      }, function (response) { // Error
+      };
+      var error = function (response) { // Error
         this.isLoading = false;
         this.hasError = true;
 
@@ -74,8 +87,12 @@ var app = new Vue({
         
         $('#buttonCoord').removeProp('disabled');
         $('#buttonNames').removeProp('disabled');
-      });
-    }
+      };
+      this.$http({url: url, method: 'GET'}).then(success, error);
+    },
 
+    isSearching: function() {
+      return this.isLoading;
+    }
   }
 });

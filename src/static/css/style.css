@@ -29,3 +29,9 @@ p.author {
 div p.bg-info {
     padding: 20px;
 }
+
+#map {
+    width: auto;
+    height: 280px;
+    background-color: #CCC;
+}
