@@ -3,6 +3,7 @@
 {% block head %}
 <title>Blue Census</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/vue.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/vue-resource.min.js') }}"></script>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
@@ -12,8 +13,8 @@
 {% block body %}
 <div class="document col-xs-12 col-md-7">
 
-    <h1><font color="#164362">Blue</font> Census</h1>
-    <p class=author>by Matheus Hoffmann Silva. get the <a href="https://github.com/hoffmannmatheus/blue-census">source code</a>.</p>
+    <h1><span class=blue>Blue</span> Census</h1>
+    <p class=author>by Matheus Hoffmann Silva. get the <a target='_blank' href="https://github.com/hoffmannmatheus/blue-census">source code</a>.</p>
   
   <div id="app">
 
@@ -87,23 +88,60 @@
       <span class="sr-only">Error!</span> Error: [[errorMessage]]
     </div>
 
-    <div class="panel panel-default" style="visibility:hidden; visibility:[[!isLoading && !hasError && prettyData ? 'visible' : 'hidden']];">
+    <div style="visibility:hidden; visibility:[[!isLoading && !hasError && (queryType == 'map' || (queryType == 'map_compare' && isComparisonReady)) ? 'visible' : 'hidden']];">
 <!--<div class="panel panel-default" >-->
-      <div class="panel-heading">
-        <h3 class="panel-title">Insights - [[!hasError ? data[0].STNAME : ""]] - [[!hasError ? data[0].CTYNAME : ""]]</h3>
-      </div>
-      <div class="panel-body">
-        <div id="divMaleVsFemale" class="col-xs-12 col-md-6">
-          <canvas id="chartMaleVsFemale" width="auto" height="auto"></canvas>
-          <div id="divMaleVsFemaleLegend"></div>
+
+
+      <!-- Charts for County Insights -->
+      <div class="panel panel-default" style="display:none;display:[[queryType != 'map_compare' ? 'block' : 'none']];">
+        <div class="panel-heading">
+          <h3 class="panel-title" v-if="!hasError">Insights - [[data.STNAME]] - [[data.CTYNAME]]</h3>
         </div>
-        <div id="divRaces"class="col-xs-12 col-md-6" >
-          <canvas id="chartRaces" width="auto" height="auto"></canvas>
-          <div id="divRacesLegend"></div>
+        <div class="panel-body">
+          <div id="divMaleVsFemale" class="col-xs-12 col-md-6">
+            <canvas id="chartMaleVsFemale" width="auto" height="auto"></canvas>
+            <div id="divMaleVsFemaleLegend"></div>
+          </div>
+          <div id="divRaces"class="col-xs-12 col-md-6" >
+            <canvas id="chartRaces" width="auto" height="auto"></canvas>
+            <div id="divRacesLegend"></div>
+          </div>
         </div>
       </div>
+
+      <!-- Charts for County Comparison -->
+      <div class="panel panel-default" style="display:none;display:[[queryType == 'map_compare' ? 'block' : 'none']];">
+        <div class="panel-heading">
+          <h3 class="panel-title" v-if="!hasError && dataToCompare">Comparison: [[data.CTYNAME]] vs. [[dataToCompare.CTYNAME]]</h3>
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-12 col-md-6">
+            <h3>Total Population</h3>
+            <canvas id="chartCompareTotalPop" width="auto" height="auto"></canvas>
+            <div id="divCompareTotalLegend"></div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <h3>White Population %</h3>
+            <canvas id="chartCompareWhitePop" width="auto" height="auto"></canvas>
+            <div id="divCompareWhitePop"></div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <h3>Asian Population %</h3>
+            <canvas id="chartCompareAsianPop" width="auto" height="auto"></canvas>
+            <div id="divCompareAsianPop"></div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <h3>Black Population %</h3>
+            <canvas id="chartCompareBlackPop" width="auto" height="auto"></canvas>
+            <div id="divCompareBlackPop"></div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="panel panel-default" style="display:none;display:[[!isLoading && !hasError && prettyData ? 'block' : 'none']];">
+
+    <!-- Pretty Print of Data -->
+    <div class="panel panel-default" style="display:none;display:[[!isLoading && !hasError && queryType != 'map_compare' && prettyData ? 'block' : 'none']];">
       <div class="panel-heading">
         <h3 class="panel-title">Data</h3>
       </div>
@@ -117,6 +155,7 @@
 <!-- Dependencies -->
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/bootstrap.min.js') }}"></script>
+<script type=text/javascript src="{{ url_for('static', filename='js/lib/underscore.min.js') }}"></script>
 <script type=text/javascript src="{{ url_for('static', filename='js/lib/Chart.min.js') }}"></script>
 
 <!-- Controllers -->

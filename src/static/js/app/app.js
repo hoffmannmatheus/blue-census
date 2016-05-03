@@ -12,8 +12,9 @@ app = new Vue({
     apiurl: '',
     errorMessage: '',
     data: {},
-    dataToCompare: {},
+    dataToCompare: null,
     isLoading: false,
+    isComparisonReady: false,
     hasError: false,
     coordLat: 40.752458759853, // nyc
     coordLng: -73.986740112305
@@ -34,6 +35,7 @@ app = new Vue({
      */
     setType: function(type) {
       this.queryType = type;
+      resetMapMarkers({lat:this.coordLat, lng:this.coordLng});
     },
 
     /*
@@ -41,6 +43,13 @@ app = new Vue({
      */
     getType: function() {
       return this.queryType;
+    },
+
+    /*
+     * Determines whether requests are being made.
+     */
+    isSearching: function() {
+      return this.isLoading;
     },
 
     /*
@@ -94,14 +103,15 @@ app = new Vue({
             this.errorMessage = response.data.error;
             return;
         }
-        this.data = response.data.results;
-        if (!this.data || this.data.length == 0) {
+        if (!response.data.results || response.data.results.length == 0) {
             this.hasError = true;
             this.errorMessage = 'Could not locate County.';
             return;
         }
+        this.data = response.data.results[0];
+
         this.prettyData = JSON.stringify(response.data, null, 2);
-        charts.plotCharts(this.data);
+        charts.plotCountyCharts(this.data);
       };
       var error = function (response) { // Error
         this.isLoading = false;
@@ -117,13 +127,41 @@ app = new Vue({
      * plot the comparison graphs.
      */
     compareTo: function(coord) {
-    },
+      this.isLoading = true;
+      this.hasError = false;
+      this.updateButtonStates();
 
-    /*
-     * Determines whether requests are being made.
-     */
-    isSearching: function() {
-      return this.isLoading;
+      var url = 'http://' + window.location.hostname + '/?';
+      url += 'lat=' + coord.lat + '&lon=' + coord.lng;
+
+      var success = function (response) {
+        this.isLoading = false;
+        this.updateButtonStates();
+
+        this.hasError = !response.data.success;
+        if (this.hasError) {
+            this.errorMessage = response.data.error;
+            return;
+        }
+        this.dataToCompare = _.clone(this.data); // Invert for the next time.
+        if (!response.data.results || response.data.results.length == 0) {
+            this.hasError = true;
+            this.errorMessage = 'Could not locate this county, please select another one.';
+            return;
+        }
+        this.data = response.data.results[0];
+        this.isComparisonReady = true;
+        this.prettyData = '';
+        charts.plotComparisonCharts(this.data, this.dataToCompare);
+        alternateMapMarker(); // Invert markers next time.
+      };
+      var error = function (response) { // Error
+        this.isLoading = false;
+        this.hasError = true;
+        this.updateButtonStates();
+        this.errorMessage = 'Error retrieving data. Status : '+response.status;
+      };
+      this.$http({url: url, method: 'GET'}).then(success, error);
     },
 
     /*

@@ -1,5 +1,12 @@
 /* map.js */
 
+var plotBlueMarkerNext = true;  // iterates red and blue marker
+var marker1;
+var marker2;
+
+/*
+ * Called when Google Maps API finished loading (jsonp).
+ */
 function initMap() {
   var mapContainer = document.getElementById('map');
 
@@ -14,17 +21,14 @@ function initMap() {
   };
 
   var map = new google.maps.Map(mapContainer, config);
-  var marker1 = new google.maps.Marker({
+  marker1 = new google.maps.Marker({
     position: markerPosition1,
-    icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
     map: map
   });
-  var marker2 = new google.maps.Marker({
-    icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  marker2 = new google.maps.Marker({
     map: map
   });
 
-  var plotBlueMarkerNext = true;  // iterates red and blue
   map.addListener('click', function(evt) {
     if (app.isSearching()) {
       console.log('Still searching, will do nothing.');
@@ -48,3 +52,15 @@ function initMap() {
     }
   });
 };
+
+function alternateMapMarker() {
+  plotBlueMarkerNext = app.getType() == 'map_compare'
+      ? !plotBlueMarkerNext // Invert marker if in comparison mode.
+      : plotBlueMarkerNext; // Do nothing otherwise.
+}
+
+function resetMapMarkers(coord) {
+    marker1.setPosition(coord);
+    marker2.setPosition({lat:-27.6054954,lng:-48.4588024}); // No one will find me.
+    plotBlueMarkerNext = true;
+}

@@ -17,6 +17,10 @@ body {
     padding: 10px 20px;
 }
 
+.blue {
+    color: #164362;
+}
+
 div.document {
     float: none;
     margin: 0 auto;
