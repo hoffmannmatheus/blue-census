@@ -18,16 +18,23 @@
   <div id="app">
 
     <h4>Search by:</h4>
+
     <form class="form-inline">
       <button type="button" class="btn btn-[[queryType == 'map' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map')">Map</button>
       <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('coord')">Lagitude and Longitude</button>
       <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('names')">State and County names</button>
     </form>
 
+    <h4>Compare by:</h4>
+
+    <form class="form-inline">
+      <button type="button" class="btn btn-[[queryType == 'map_compare' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map_compare')">Map</button>
+    </form>
+
     <!-- MAP -->
-    <div class=typeCoord style="display:[[queryType == 'map' ? 'block' : 'none']];">
-      <h4>Select a spot on the Map</h4>
-        <div id="map"></div>
+    <div class=typeCoord style="display:[[queryType == 'map' || queryType == 'map_compare' ? 'block' : 'none']];">
+      <h4>[[queryType == 'map' ? "Select a county on the Map" : "Select two counties to compare:"]]</h4>
+      <div id="map"></div>
     </div>
 
     <!-- COORDINATES -->
@@ -36,10 +43,11 @@
       <form class="form-inline">
         <div class="form-group">
           <label for="latitudeInput">Latitude</label>
-          <input type="text" class="form-control" id="latitudeInput" v-model=coordLat value="30">
+          <input type="text" class="form-control" id="latitudeInput" v-model=coordLat>
         </div>
         <div class="form-group">
-          <label for="longitudeInput">Longitude</label> <input type="text" class="form-control" id="longitudeInput" v-model=coordLon value="-90">
+          <label for="longitudeInput">Longitude</label>
+          <input type="text" class="form-control" id="longitudeInput" v-model=coordLng>
         </div>
         <button id=buttonCoord v-on:click="search()" type=button class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> County Census</button>
       </form>
@@ -63,12 +71,12 @@
     
     <br/>
 
-    <!-- NAMES -->
+    <!-- 
     <p>API URL:</p>
     <pre>[[buildUrl()]]</pre>
-
     <br/>
-    
+    -->
+
     <div class="alert alert-info" role="alert" style="display:none;display:[[isLoading ? 'block' : 'none']];">
       <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
       Waiting for API response...
@@ -82,7 +90,7 @@
     <div class="panel panel-default" style="visibility:hidden; visibility:[[!isLoading && !hasError && prettyData ? 'visible' : 'hidden']];">
 <!--<div class="panel panel-default" >-->
       <div class="panel-heading">
-        <h3 class="panel-title">Insights - [[stateName]] - [[countyName]]</h3>
+        <h3 class="panel-title">Insights - [[!hasError ? data[0].STNAME : ""]] - [[!hasError ? data[0].CTYNAME : ""]]</h3>
       </div>
       <div class="panel-body">
         <div id="divMaleVsFemale" class="col-xs-12 col-md-6">

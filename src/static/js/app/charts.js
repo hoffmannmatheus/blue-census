@@ -9,8 +9,8 @@ barLegendTemplate: "<ul style=\"list-style-type: none;\" class=\"<%=name.toLower
 var plotChart1 = function(data) {
   var canvas = document.getElementById("chartMaleVsFemale").getContext("2d");
 
-  var males = data.results[0].TOT_MALE;
-  var females = data.results[0].TOT_FEMALE;
+  var males = data[0].TOT_MALE;
+  var females = data[0].TOT_FEMALE;
 
   var data = [
     {
@@ -39,7 +39,7 @@ var plotChart1 = function(data) {
 var plotChart2 = function(data) {
   var canvas = document.getElementById("chartRaces").getContext("2d");
 
-  var d = data.results[0];
+  var d = data[0];
   var white = d.WA_MALE + d.WA_FEMALE;
   var afamer = d.BA_MALE + d.BA_FEMALE;
   var indian = d.IA_MALE + d.IA_FEMALE;
