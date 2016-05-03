@@ -30,7 +30,6 @@ app = new Vue({
      * Sets the type of search or comparison. Can be:
      * - map: Search for only one county information, from the map.
      * - names: Search for a county by state/county names.
-     * - coord: Search for a county using coordinates.
      * - map_compare: Comparison of two counties from the map.
      */
     setType: function(type) {
@@ -75,8 +74,6 @@ app = new Vue({
       var url = 'http://' + window.location.hostname + '/?';
       if (this.getType() == 'names') {
         url += 'state=' + this.nameState + '&county=' + this.nameCounty;
-      } else if (this.getType() == 'map') {
-        url += 'lat=' + this.coordLat+ '&lon=' + this.coordLng;
       } else {
         url += 'lat=' + this.coordLat + '&lon=' + this.coordLng;
       }

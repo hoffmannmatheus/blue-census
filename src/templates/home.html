@@ -18,40 +18,18 @@
   
   <div id="app">
 
-    <h4>Search by:</h4>
+    <h4>Modes:</h4>
 
     <form class="form-inline">
-      <button type="button" class="btn btn-[[queryType == 'map' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map')">Map</button>
-      <button type="button" class="btn btn-[[queryType == 'coord' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('coord')">Lagitude and Longitude</button>
-      <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('names')">State and County names</button>
-    </form>
-
-    <h4>Compare by:</h4>
-
-    <form class="form-inline">
-      <button type="button" class="btn btn-[[queryType == 'map_compare' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map_compare')">Map</button>
+      <button type="button" class="btn btn-[[queryType == 'map' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map')">County Insights</button>
+      <button type="button" class="btn btn-[[queryType == 'map_compare' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('map_compare')">County Comparisons</button>
+      <button type="button" class="btn btn-default btn-[[queryType == 'names' ? 'info' : 'default']]" style="margin-bottom: 15px;" v-on:click="setType('names')">County Search</button>
     </form>
 
     <!-- MAP -->
     <div class=typeCoord style="display:[[queryType == 'map' || queryType == 'map_compare' ? 'block' : 'none']];">
-      <h4>[[queryType == 'map' ? "Select a county on the Map" : "Select two counties to compare:"]]</h4>
+      <h4>[[queryType == 'map' ? "Select a county on the Map:" : "Select two counties to compare:"]]</h4>
       <div id="map"></div>
-    </div>
-
-    <!-- COORDINATES -->
-    <div class=typeCoord style="display:[[queryType == 'coord' ? 'block' : 'none']];">
-      <h4>Latitude and Longitude</h4>
-      <form class="form-inline">
-        <div class="form-group">
-          <label for="latitudeInput">Latitude</label>
-          <input type="text" class="form-control" id="latitudeInput" v-model=coordLat>
-        </div>
-        <div class="form-group">
-          <label for="longitudeInput">Longitude</label>
-          <input type="text" class="form-control" id="longitudeInput" v-model=coordLng>
-        </div>
-        <button id=buttonCoord v-on:click="search()" type=button class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> County Census</button>
-      </form>
     </div>
 
     <!-- NAMES -->
@@ -88,14 +66,16 @@
       <span class="sr-only">Error!</span> Error: [[errorMessage]]
     </div>
 
-    <div style="visibility:hidden; visibility:[[!isLoading && !hasError && (queryType == 'map' || (queryType == 'map_compare' && isComparisonReady)) ? 'visible' : 'hidden']];">
-<!--<div class="panel panel-default" >-->
+    <h4 v-if="queryType == 'map_compare' && !isComparisonReady">
+      Please, select the second county...
+    </h4>
 
+    <div style="visibility:hidden; visibility:[[!isLoading && !hasError && (queryType == 'names' || queryType == 'map' || (queryType == 'map_compare' && isComparisonReady)) ? 'visible' : 'hidden']];">
 
       <!-- Charts for County Insights -->
       <div class="panel panel-default" style="display:none;display:[[queryType != 'map_compare' ? 'block' : 'none']];">
         <div class="panel-heading">
-          <h3 class="panel-title" v-if="!hasError">Insights - [[data.STNAME]] - [[data.CTYNAME]]</h3>
+          <h3 class="panel-title" v-if="!hasError">Insights: [[data.STNAME]] - [[data.CTYNAME]]</h3>
         </div>
         <div class="panel-body">
           <div id="divMaleVsFemale" class="col-xs-12 col-md-6">
