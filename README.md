@@ -4,9 +4,9 @@ blue census
 This is a simple web service that returns US county-level Census information.
 This information was retrieved from the US Census Bureau.
 
-Access the service through (temporary link):
+Access the service through:
 
-http://52.37.37.110/
+http://bluecensus.matsilva.io/
 
 
 
