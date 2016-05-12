@@ -1,5 +1,5 @@
-import services.database as db
-import services.county_finder as county_finder
+from services import database
+from services import county_finder
 
 
 def from_coordinates(args):
@@ -17,14 +17,14 @@ def from_coordinates(args):
         return {'success': False, 'error': 'County not found.'}
     
     query = {}
-    query['COUNTY'] = county_code
-    query['STATE'] = state_code
+    query['CTYNAME'] = county_code
+    query['STNAME'] = state_code
 
     # optionals
     query['YEAR'] = translate_year(args.get('year'))
     query['AGEGRP'] = translate_age(args.get('agegroup'))
 
-    census = db.get(query)
+    census = database.get(query)
     return {'success': True, 'count': len(census), 'results': census}
 
 def from_name(args):
@@ -42,7 +42,7 @@ def from_name(args):
     query['YEAR'] = translate_year(args.get('year'))
     query['AGEGRP'] = translate_age(args.get('agegroup'))
 
-    census = db.get(query)
+    census = database.get(query)
 
     if len(census) == 0:
         return {'success': False, 'error': 'County or State name not found.'}

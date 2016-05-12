@@ -1,8 +1,9 @@
+import os
+
 from flask import Flask
 from flask import request, abort, jsonify, render_template
-from os.path import abspath, dirname
 
-import controllers.census_info as census_info
+from controllers import census_info
 
 app = Flask('blue')
 
@@ -29,6 +30,6 @@ def page_not_found(error):
     return 'This page does not exist', 404
 
 if __name__ == '__main__':
-    app.debug = False
-    app.root_path = abspath(dirname(__file__))
+    app.debug = True
+    app.root_path = os.path.abspath(os.path.dirname(__file__))
     app.run(host='0.0.0.0',port=80)
