@@ -2,7 +2,7 @@ import requests
 
 service_url = 'https://maps.googleapis.com/maps/api/geocode/json'
 service_options = '?sensor=false&latlng={0},{1}'
-service_key= '&key=AIzaSyASbuJxEduWPRg34sLhHrevSwuc_Nxxqxg'  # locked for my domain :-)
+service_key= '&key=AIzaSyAbhoz54Q5_pGeVp5hSV57XvonlUj1Ohmw'  # locked for my domain :-)
 
 def from_coordinates(lat, lon):
     url = service_url + service_options.format(lat, lon) + service_key
